@@ -440,6 +440,30 @@ class Game:
 
             pygame.display.flip()
 
+# if __name__ == "__main__":
+#     game = Game()
+#     game.run()
+
+import requests
+from PIL import Image
+
+def get_image_url(api_key, query):
+    url = f'https://api.unsplash.com/photos/random'
+    headers = {'Authorization': f'Client-ID {api_key}'}
+    params = {'query': query}
+    response = requests.get(url, headers=headers, params=params)
+    data = response.json()
+    return data['urls']['regular']
+
+def display_image(url):
+    image = Image.open(requests.get(url, stream=True).raw)
+    image.show()
+
+def main():
+    api_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
+    word = input("Enter a word: ")
+    image_url = get_image_url(api_key, word)
+    display_image(image_url)
+
 if __name__ == "__main__":
-    game = Game()
-    game.run()
+    main()
