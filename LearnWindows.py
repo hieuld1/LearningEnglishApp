@@ -34,7 +34,7 @@ class LearnWin:
         # self.prep_word(word)
         # self.screen.blit(self.word_image, self.word_rect) 
         # Define the rect area for text
-        text_rect = pygame.Rect(100, 120, 380, 220)   
+        text_rect = pygame.Rect(300, 160, 380, 220)   
         
         self.word_rect.center = self.screen_rect.center
 

@@ -2,7 +2,10 @@ import pygame
 import sys
 import openpyxl
 import os
+import requests
 
+from PIL import Image
+from io import BytesIO
 from configure_box import ConfigBox
 from button import Button
 from googletrans import Translator
@@ -21,6 +24,7 @@ class CreateLesson:
         self.ButtonFinish       = Button(self, 250, 260, "Finish")
 
         self.excel_file_name    = 'test.xlsx'
+        self.excel_file_name_no_tail    = 'test'
 
 
     def create_lesson_draw(self):
@@ -60,6 +64,8 @@ class CreateLesson:
             print("Button insert") 
             word1 = str(self.ConfigBoxWord.text)
             word2 = self.__translate_to_vietnamese(word1)   #'nothing'   #self.__translate_to_vietnamese(word1)
+            self.__get_image(word1)
+
             self._insert_excel_file(word1, word2)  
 
             self.ConfigBoxWord.text = ''  
@@ -74,14 +80,14 @@ class CreateLesson:
             self.open_or_create_excel_file(file_name)
             # self._create_excel_file(file_name + '.xlsx')
 
-    def _create_excel_file(self, file_name):
-        # Create a new workbook
-        self.workbook = openpyxl.Workbook()
+    # def _create_excel_file(self, file_name):
+    #     # Create a new workbook
+    #     self.workbook = openpyxl.Workbook()
 
-        # Save file name
-        self.workbook.save(file_name)
+    #     # Save file name
+    #     self.workbook.save(file_name)
 
-        self.excel_file_name = file_name
+    #     self.excel_file_name = file_name
 
     def _insert_excel_file(self, data1, data2):
         # Load excel file
@@ -121,5 +127,28 @@ class CreateLesson:
             print(f"Creating a new file: {file_name}.xlsx")
 
         self.excel_file_name = file_name + '.xlsx'
+        self.excel_file_name_no_tail = file_name
 
         return workbook
+    
+    def __get_image(self, word):
+        # Replace 'YOUR_UNSPLASH_ACCESS_KEY' with your actual Unsplash Access Key
+        access_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
+        
+        # Make a request to the Unsplash API to get a random image based on the input word
+        response = requests.get(f'https://api.unsplash.com/photos/random?query={word}&client_id={access_key}')
+        
+        # Extract the image URL from the API response
+        image_url = response.json()['urls']['regular']
+        
+        # Download the image
+        image_data = requests.get(image_url).content
+        
+        # Open the image using PIL
+        img = Image.open(BytesIO(image_data))
+        
+        # Resize the image to 240 x 160 pixels
+        img = img.resize((240, 160))
+        
+        # Save the image to the 'images' folder
+        img.save(f'images/{self.excel_file_name_no_tail}_{word}.jpg')

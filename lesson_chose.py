@@ -1,6 +1,7 @@
 import pygame
 import sys
 import openpyxl
+import os
 
 from tkinter import Tk, filedialog
 from button import Button
@@ -41,10 +42,30 @@ class LessonChoose:
 
         self.learning_mode              = LEARN_MODE_LESSON_CARD
 
+        # Load the word image and get its rect.
+        self.learn_word_image           = pygame.image.load('images/test_an.jpg')
+        self.learn_word_image_rect      = self.learn_word_image.get_rect()
 
+        # Start each new word  at the bottom center of the screen.
+        self.learn_word_image_rect.midleft = self.screen_rect.midleft
+
+        self.learn_file_name            = 'test'
 
         # Flag handle game configure done
         self.lesson_choose_done = False
+
+    def __choose_lesson_get_file_name(self, file_path):
+        # Split the file path into directory and file name
+        directory, file_name = os.path.split(file_path)
+
+        # Split the file name and extension
+        file_name, file_extension = os.path.splitext(file_name)
+
+        return file_name
+
+    def choose_lesson_draw_picture(self, word):  
+        self.learn_word_image   = pygame.image.load(f'images/{self.learn_file_name}_{word}.jpg')
+        self.screen.blit(self.learn_word_image, self.learn_word_image_rect)
 
     def choose_lesson_draw(self):
         # print("draw lesson windows")
@@ -53,6 +74,9 @@ class LessonChoose:
             self.yes_button.draw_button()
             self.no_button.draw_button()
             self.flip_button.draw_button()
+
+            if(self.learning_mode == LEARN_MODE_LESSON_CARD):
+                self.choose_lesson_draw_picture(self.display_word)
 
             if(self.learning_mode == LEARN_MODE_LESSON_WORD):
                 # print("Lesson word")
@@ -158,14 +182,21 @@ class LessonChoose:
 
             if(num_loop >= self.learning_number_word):
                 print("All words have been learned!")
-                self.display_word       = 'finish work!'
+                # self.display_word       = 'finish work!'
+                # Flag handle game configure done
+                self.lesson_choose_done = False
                 return NUM_LEARN_WORDS_DONE
 
     def choose_lesson_open_file_dialog(self):
+        
         root = Tk()
         root.withdraw()  # Hide the main window
 
         file_path = filedialog.askopenfilename(title="Select a File", filetypes = [("Excel file", "*.xlsx")])
+
+        self.learn_file_name            = self.__choose_lesson_get_file_name(file_path)
+        print(self.learn_file_name )
+
         if file_path:
             # print("Selected File:", file_path)
             self.choose_lesson_read_excel(file_path)
@@ -182,7 +213,7 @@ class LessonChoose:
                     self.display_word_key   = 0 
                     self.display_word       = self.learn_word_value[0]
 
-            print("display word: ", self.display_word)
+            # print("display word: ", self.display_word)
 
     def choose_lesson_read_excel(self, file_path):
         # print("read excel file")
@@ -192,8 +223,8 @@ class LessonChoose:
 
             # print(sheet.max_row)
 
-            for i in range(1, sheet.max_row):
-                # print(i, sheet.cell(row = i, column = 1).value, sheet.cell(row = i, column = 2).value)
+            for i in range(2, sheet.max_row + 1):
+                print(i, sheet.cell(row = i, column = 1).value, sheet.cell(row = i, column = 2).value)
                 key_read = sheet.cell(row = i, column = 1).value
                 # string_read = self.__get_first_word(str(key_read))
                 self.learn_word_key = self.learn_word_key + [key_read]
@@ -202,6 +233,9 @@ class LessonChoose:
                 self.learn_word_value = self.learn_word_value + [val_read]
 
                 self.learn_word_stat    = self.learn_word_stat + [0]
+
+                # image
+                # self.learn_word_image   = self.learn_word_image + [pygame.image.load(f'images/{self.learn_file_name}_{key_read}.jpg')]
 
             workbook.close()
 

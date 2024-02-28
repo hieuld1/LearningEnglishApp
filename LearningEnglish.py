@@ -115,12 +115,12 @@ class LearningEnglish:
 
             print("Learning mode", self.ComboBoxLearnMode.selected_option, self.learning_mode)
 
-            if self.learning_mode == LEARN_MODE_LESSON_CARD:
-                print("LEARN_MODE_LESSON_CARD")
-            elif self.learning_mode == LEARN_MODE_LESSON_WORD:
-                print("LEARN_MODE_LESSON_WORD")
-            elif self.learning_mode == LEARN_MODE_CREATE_LESSON:
-                print("Create lesson to learn")
+            # if self.learning_mode == LEARN_MODE_LESSON_CARD:
+            #     print("LEARN_MODE_LESSON_CARD")
+            # elif self.learning_mode == LEARN_MODE_LESSON_WORD:
+            #     print("LEARN_MODE_LESSON_WORD")
+            # elif self.learning_mode == LEARN_MODE_CREATE_LESSON:
+            #     print("Create lesson to learn")
 
             # Configure done
             self.game_configure_done    = True

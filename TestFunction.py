@@ -444,26 +444,57 @@ class Game:
 #     game = Game()
 #     game.run()
 
+# import requests
+# from PIL import Image
+
+# def get_image_url(api_key, query):
+#     url = f'https://api.unsplash.com/photos/random'
+#     headers = {'Authorization': f'Client-ID {api_key}'}
+#     params = {'query': query}
+#     response = requests.get(url, headers=headers, params=params)
+#     data = response.json()
+#     return data['urls']['regular']
+
+# def display_image(url):
+#     image = Image.open(requests.get(url, stream=True).raw)
+#     image.show()
+
+# def main():
+#     api_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
+#     word = input("Enter a word: ")
+#     image_url = get_image_url(api_key, word)
+#     display_image(image_url)
+
+# if __name__ == "__main__":
+#     main()
+            
 import requests
 from PIL import Image
+from io import BytesIO
 
-def get_image_url(api_key, query):
-    url = f'https://api.unsplash.com/photos/random'
-    headers = {'Authorization': f'Client-ID {api_key}'}
-    params = {'query': query}
-    response = requests.get(url, headers=headers, params=params)
-    data = response.json()
-    return data['urls']['regular']
+def get_image(word):
+    # Replace 'YOUR_UNSPLASH_ACCESS_KEY' with your actual Unsplash Access Key
+    access_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
+    
+    # Make a request to the Unsplash API to get a random image based on the input word
+    response = requests.get(f'https://api.unsplash.com/photos/random?query={word}&client_id={access_key}')
+    
+    # Extract the image URL from the API response
+    image_url = response.json()['urls']['regular']
+    
+    # Download the image
+    image_data = requests.get(image_url).content
+    
+    # Open the image using PIL
+    img = Image.open(BytesIO(image_data))
+    
+    # Resize the image to 240 x 160 pixels
+    img = img.resize((240, 160))
+    
+    # Save the image to the 'images' folder
+    img.save(f'images/{word}_image.jpg')
 
-def display_image(url):
-    image = Image.open(requests.get(url, stream=True).raw)
-    image.show()
+# Example usage
+word_input = input("Enter a word: ")
+get_image(word_input)
 
-def main():
-    api_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
-    word = input("Enter a word: ")
-    image_url = get_image_url(api_key, word)
-    display_image(image_url)
-
-if __name__ == "__main__":
-    main()
