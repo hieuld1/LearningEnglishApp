@@ -25,7 +25,15 @@ class CreateLesson:
 
         self.excel_file_name    = 'test.xlsx'
         self.excel_file_name_no_tail    = 'test'
+                
+        # Flag handle learn configure done
+        self.learn_configure_done = False
 
+    def create_lesson_set_config(self, val):
+        self.learn_configure_done = val
+
+    def create_lesson_get_config(self):
+        return self.learn_configure_done   
 
     def create_lesson_draw(self):
         # print("draw lesson windows")
@@ -53,8 +61,8 @@ class CreateLesson:
         if button_clicked:
             print("Button Finish")
 
-            # Flag handle game configure done
-            self.game_configure_done    = False
+            # Flag handle learn configure done
+            self.learn_configure_done    = False
 
     def _check_insert_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""

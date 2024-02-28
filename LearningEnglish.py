@@ -27,7 +27,7 @@ class LearningEnglish:
         self.settings           = Settings()
         self.screen             = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         
-        pygame.display.set_caption("Learning English")
+        pygame.display.set_caption("Learning English Ver 1.1")
 
         self.stats              = GameStats(self)
         self.CreateLesson       = CreateLesson(self)
@@ -82,6 +82,12 @@ class LearningEnglish:
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
 
+        if(self.CreateLesson.create_lesson_get_config() == False):
+            self.game_configure_done = False
+
+        if(self.LessonChoose.choose_lesson_get_config() == False):
+            self.game_configure_done = False
+
         if self.game_configure_done:
             if self.learning_mode == LEARN_MODE_LESSON_CARD:
                 # print("LEARN_MODE_LESSON_CARD")
@@ -123,6 +129,8 @@ class LearningEnglish:
             #     print("Create lesson to learn")
 
             # Configure done
+            self.CreateLesson.create_lesson_set_config(True)
+            self.LessonChoose.choose_lesson_set_config(True)
             self.game_configure_done    = True
 
 if __name__ == '__main__':

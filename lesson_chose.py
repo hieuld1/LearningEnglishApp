@@ -51,8 +51,17 @@ class LessonChoose:
 
         self.learn_file_name            = 'test'
 
-        # Flag handle game configure done
-        self.lesson_choose_done = False
+        # Flag handle learn choose done
+        self.lesson_choose_done         = False
+
+        # Flag handle learn configure done
+        self.learn_configure_done       = False
+
+    def choose_lesson_set_config(self, val):
+        self.learn_configure_done = val
+
+    def choose_lesson_get_config(self):
+        return self.learn_configure_done  
 
     def __choose_lesson_get_file_name(self, file_path):
         # Split the file path into directory and file name
@@ -183,8 +192,10 @@ class LessonChoose:
             if(num_loop >= self.learning_number_word):
                 print("All words have been learned!")
                 # self.display_word       = 'finish work!'
-                # Flag handle game configure done
-                self.lesson_choose_done = False
+                # Flag handle learn configure/choose done
+                self.lesson_choose_done     = False
+                self.learn_configure_done   = False
+                
                 return NUM_LEARN_WORDS_DONE
 
     def choose_lesson_open_file_dialog(self):
