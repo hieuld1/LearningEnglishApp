@@ -3,12 +3,13 @@ import sys
 import openpyxl
 import os
 
+from datetime import datetime
 from tkinter import Tk, filedialog
 from button import Button
-
 from settings import Settings
 from LearnWindows import LearnWin
 from inputBox import InputBox
+from record_data import RecordData
 
 LEARN_MODE_LESSON_CARD      = 2
 LEARN_MODE_LESSON_WORD      = 3
@@ -23,13 +24,14 @@ class LessonChoose:
         self.font = pygame.font.Font(None, 36)
 
         # Make the Play button.
-        self.ButtonOpenFile     = Button(self, 200, 160, "Lesson")
-        self.yes_button         = Button(self, 400, 260, "Yes")
-        self.no_button          = Button(self, 0, 260, "No")
-        self.flip_button        = Button(self, 200, 0, "Flip")
+        self.ButtonOpenFile     = Button(self, 320, 200, "Lesson")
+        self.yes_button         = Button(self, 620, 420, "Rememb")
+        self.no_button          = Button(self, 0, 420, "Forget")
+        self.flip_button        = Button(self, 320, 0, "Flip")
         self.settings           = Settings()
         self.LearnWin           = LearnWin(self)
-        self.InputBox           = InputBox(self, 140, 60, 140, 32)
+        self.InputBox           = InputBox(self, 140, 60, 140, 40)
+        self.RecordData         = RecordData(self)
 
         # Create a learning list
         self.learn_word_key     = []
@@ -58,7 +60,7 @@ class LessonChoose:
         self.learn_configure_done       = False
 
     def choose_lesson_set_config(self, val):
-        self.learn_configure_done = val
+        self.learn_configure_done       = val
 
     def choose_lesson_get_config(self):
         return self.learn_configure_done  
@@ -191,7 +193,10 @@ class LessonChoose:
 
             if(num_loop >= self.learning_number_word):
                 print("All words have been learned!")
-                # self.display_word       = 'finish work!'
+
+                # update time stop learning and save in database
+                self.RecordData.record_data_save()
+
                 # Flag handle learn configure/choose done
                 self.lesson_choose_done     = False
                 self.learn_configure_done   = False
@@ -213,6 +218,11 @@ class LessonChoose:
             self.choose_lesson_read_excel(file_path)
             # print("Read done")
             self.lesson_choose_done = True
+
+            # update time start learning
+            start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.RecordData.record_data_set_start_time(start_time)
+            self.RecordData.record_data_set_learn_lesson(self.learn_file_name)
 
             # print("Number word: ", self.learning_number_word)
             if self.learning_number_word > 0:
@@ -244,9 +254,6 @@ class LessonChoose:
                 self.learn_word_value = self.learn_word_value + [val_read]
 
                 self.learn_word_stat    = self.learn_word_stat + [0]
-
-                # image
-                # self.learn_word_image   = self.learn_word_image + [pygame.image.load(f'images/{self.learn_file_name}_{key_read}.jpg')]
 
             workbook.close()
 

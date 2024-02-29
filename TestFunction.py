@@ -468,33 +468,96 @@ class Game:
 # if __name__ == "__main__":
 #     main()
             
-import requests
-from PIL import Image
-from io import BytesIO
+# import requests
+# from PIL import Image
+# from io import BytesIO
 
-def get_image(word):
-    # Replace 'YOUR_UNSPLASH_ACCESS_KEY' with your actual Unsplash Access Key
-    access_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
+# def get_image(word):
+#     # Replace 'YOUR_UNSPLASH_ACCESS_KEY' with your actual Unsplash Access Key
+#     access_key = 'hOk85mGaPnka79ncCAuCi6agDY6UWChTMuVwMNmx6k0'
     
-    # Make a request to the Unsplash API to get a random image based on the input word
-    response = requests.get(f'https://api.unsplash.com/photos/random?query={word}&client_id={access_key}')
+#     # Make a request to the Unsplash API to get a random image based on the input word
+#     response = requests.get(f'https://api.unsplash.com/photos/random?query={word}&client_id={access_key}')
     
-    # Extract the image URL from the API response
-    image_url = response.json()['urls']['regular']
+#     # Extract the image URL from the API response
+#     image_url = response.json()['urls']['regular']
     
-    # Download the image
-    image_data = requests.get(image_url).content
+#     # Download the image
+#     image_data = requests.get(image_url).content
     
-    # Open the image using PIL
-    img = Image.open(BytesIO(image_data))
+#     # Open the image using PIL
+#     img = Image.open(BytesIO(image_data))
     
-    # Resize the image to 240 x 160 pixels
-    img = img.resize((240, 160))
+#     # Resize the image to 240 x 160 pixels
+#     img = img.resize((240, 160))
     
-    # Save the image to the 'images' folder
-    img.save(f'images/{word}_image.jpg')
+#     # Save the image to the 'images' folder
+#     img.save(f'images/{word}_image.jpg')
 
-# Example usage
-word_input = input("Enter a word: ")
-get_image(word_input)
+# # Example usage
+# word_input = input("Enter a word: ")
+# get_image(word_input)
+            
+
+
+
+
+import sqlite3
+from datetime import datetime
+
+def create_table(conn):
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS program_records (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            start_time TEXT,
+            exit_time TEXT,
+            learn_lesson TEXT
+        )
+    ''')
+    conn.commit()
+
+def save_program_execution(conn):
+    start_time1 = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Simulate program execution
+    input("Press Enter when the program is about to exit...")
+
+    learn_lesson1 = input("Input lesson to learn...")
+
+    exit_time1 = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO program_records (start_time, exit_time, learn_lesson) VALUES (?, ?, ?)
+    ''', (start_time1, exit_time1, learn_lesson1))
+    conn.commit()
+
+def read_program_records(conn):
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM program_records')
+    records = cursor.fetchall()
+
+    for record in records:
+        print(f"Start Time: {record[1]}, Exit Time: {record[2]}, learn_lesson: {record[3]}")
+
+if __name__ == "__main__":
+    # Connect to SQLite database (change the database name if using a different database)
+    connection = sqlite3.connect('program_records.db')
+
+    # Create the table if it doesn't exist
+    create_table(connection)
+
+    # Save program execution record
+    save_program_execution(connection)
+
+    # Read and display all program records
+    read_program_records(connection)
+
+    # Close the database connection
+    connection.close()
+
+
+
+
 

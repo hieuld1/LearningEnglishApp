@@ -36,10 +36,13 @@ class LearningEnglish:
         # Configure learning mode
         learn_mode_list = ["LESSON CARD", "LESSON FILL", "CREATE LESSON"]
         self.ComboBoxLearnMode      = ComboBox(self, learn_mode_list, 250, 60, 200, 32, 'Learn Mode')
-        self.Config_button          = Button(self, 240, 260, "Config")
+        self.Config_button          = Button(self, 540, 60, "Config")
+        self.Show_log_button        = Button(self, 300, 420, "Record")
 
         # Flag handle game configure done
         self.game_configure_done    = False
+
+        self.show_record_data       = False
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -58,6 +61,7 @@ class LearningEnglish:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
+                self.LessonChoose.RecordData.record_data_save()
                 sys.exit() 
 
             if(self.game_configure_done):
@@ -75,6 +79,7 @@ class LearningEnglish:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     self._check_config_button(mouse_pos)
+                    self._check_show_log_button(mouse_pos)
 
                 self.ComboBoxLearnMode.combo_box_handle_event(event)    
 
@@ -102,6 +107,10 @@ class LearningEnglish:
         else:
             self.ComboBoxLearnMode.combo_box_display() 
             self.Config_button.draw_button()
+            self.Show_log_button.draw_button()
+
+            if self.show_record_data:
+                self.LessonChoose.RecordData.record_data_read_last_20_records()
 
         pygame.display.flip()       
 
@@ -132,6 +141,19 @@ class LearningEnglish:
             self.CreateLesson.create_lesson_set_config(True)
             self.LessonChoose.choose_lesson_set_config(True)
             self.game_configure_done    = True
+
+    def _check_show_log_button(self, mouse_pos):
+        """Start a new game when the player clicks Play."""
+        button_clicked = self.Show_log_button.rect.collidepoint(mouse_pos)
+        
+        if button_clicked:
+            # self.LessonChoose.RecordData.record_data_read_records()
+            # self.LessonChoose.RecordData.record_data_read_last_20_records()
+            if self.show_record_data:
+                self.show_record_data = False
+            else:
+                self.show_record_data = True
+            
 
 if __name__ == '__main__':
     # Make a game instance, and run the game.
