@@ -75,6 +75,10 @@ class LessonChoose:
         return file_name
 
     def choose_lesson_draw_picture(self, word):  
+        # Check if the image exists
+        if not os.path.exists(f'images/{self.learn_file_name}_{word}.jpg'):
+            print("Image not exist")
+            return
         self.learn_word_image   = pygame.image.load(f'images/{self.learn_file_name}_{word}.jpg')
         self.screen.blit(self.learn_word_image, self.learn_word_image_rect)
 
@@ -86,7 +90,8 @@ class LessonChoose:
             self.no_button.draw_button()
             self.flip_button.draw_button()
 
-            if(self.learning_mode == LEARN_MODE_LESSON_CARD):
+            # if(self.learning_mode == LEARN_MODE_LESSON_CARD):
+            if self.display_word_key:
                 self.choose_lesson_draw_picture(self.display_word)
 
             if(self.learning_mode == LEARN_MODE_LESSON_WORD):

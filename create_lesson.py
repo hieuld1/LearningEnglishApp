@@ -71,10 +71,11 @@ class CreateLesson:
         if button_clicked:
             print("Button insert") 
             word1 = str(self.ConfigBoxWord.text)
-            word2 = self.__translate_to_vietnamese(word1)   #'nothing'   #self.__translate_to_vietnamese(word1)
-            self.__get_image(word1)
-
-            self._insert_excel_file(word1, word2)  
+            word2 = self.__translate_to_vietnamese(word1)
+            
+            if word2 != None:
+                self._insert_excel_file(word1, word2)  
+                self.__get_image(word1)
 
             self.ConfigBoxWord.text = ''  
 
@@ -117,7 +118,12 @@ class CreateLesson:
     def __translate_to_vietnamese(self, word):
         translator = Translator()
         translation = translator.translate(word, src='en', dest='vi')
-        return translation.text
+        print("Word2: ", translation.text)
+        if translation.text != word:
+            return translation.text
+        else:
+            print("Can't translate word: ", word);
+            return None
     
     def open_or_create_excel_file(self, file_name):
 
@@ -146,17 +152,20 @@ class CreateLesson:
         # Make a request to the Unsplash API to get a random image based on the input word
         response = requests.get(f'https://api.unsplash.com/photos/random?query={word}&client_id={access_key}')
         
-        # Extract the image URL from the API response
-        image_url = response.json()['urls']['regular']
-        
-        # Download the image
-        image_data = requests.get(image_url).content
-        
-        # Open the image using PIL
-        img = Image.open(BytesIO(image_data))
-        
-        # Resize the image to 240 x 160 pixels
-        img = img.resize((240, 160))
-        
-        # Save the image to the 'images' folder
-        img.save(f'images/{self.excel_file_name_no_tail}_{word}.jpg')
+        if response.status_code == 200:
+            # Extract the image URL from the API response
+            image_url = response.json()['urls']['regular']
+            
+            # Download the image
+            image_data = requests.get(image_url).content
+            
+            # Open the image using PIL
+            img = Image.open(BytesIO(image_data))
+            
+            # Resize the image to 240 x 160 pixels
+            img = img.resize((240, 160))
+            
+            # Save the image to the 'images' folder
+            img.save(f'images/{self.excel_file_name_no_tail}_{word}.jpg')
+        else:
+            print("Can't find image E: %", response.status_code)
