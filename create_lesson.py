@@ -23,11 +23,14 @@ class CreateLesson:
         self.ButtonInsert       = Button(self, 250, 200, "Insert")
         self.ButtonFinish       = Button(self, 250, 260, "Finish")
 
-        self.excel_file_name    = 'test.xlsx'
+        self.excel_file_name            = 'test.xlsx'
         self.excel_file_name_no_tail    = 'test'
                 
         # Flag handle learn configure done
-        self.learn_configure_done = False
+        self.learn_configure_done   = False
+
+        self.find_word_fail         = False
+        self.find_image_fail        = False
 
     def create_lesson_set_config(self, val):
         self.learn_configure_done = val
@@ -43,6 +46,16 @@ class CreateLesson:
 
         self.ConfigBoxLesson.config_box_display()
         self.ConfigBoxWord.config_box_display()
+
+        if self.find_word_fail:
+            text = "Can't translate word"
+            text_render = self.font.render(text, True, (30, 30, 30))
+            self.screen.blit(text_render, (400, 160))
+
+        if self.find_image_fail:
+            text = "Can't find image"
+            text_render = self.font.render(text, True, (30, 30, 30))
+            self.screen.blit(text_render, (400, 200))
 
     def create_lesson_handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -120,9 +133,11 @@ class CreateLesson:
         translation = translator.translate(word, src='en', dest='vi')
         print("Word2: ", translation.text)
         if translation.text != word:
+            self.find_word_fail = False
             return translation.text
         else:
             print("Can't translate word: ", word);
+            self.find_word_fail = True
             return None
     
     def open_or_create_excel_file(self, file_name):
@@ -167,5 +182,26 @@ class CreateLesson:
             
             # Save the image to the 'images' folder
             img.save(f'images/{self.excel_file_name_no_tail}_{word}.jpg')
+            self.find_image_fail = False
         else:
             print("Can't find image E: %", response.status_code)
+            self.find_image_fail = True
+            
+
+    def show_error_window(self, error_message):
+        pygame.init()
+        error_screen = pygame.display.set_mode((300, 200))
+        pygame.display.set_caption("Error Window")
+        
+        font = pygame.font.Font(None, 36)
+        text_surface = font.render(error_message, True, (255, 0, 0))
+        text_rect = text_surface.get_rect(center=(150, 100))
+        
+        error_screen.fill((255, 255, 255))
+        error_screen.blit(text_surface, text_rect)
+        pygame.display.flip()
+        
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    return  # Return to main window if error window is closed

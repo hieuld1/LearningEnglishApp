@@ -225,60 +225,60 @@
 # # disable_ethernet()  # Uncomment this line to disable Ethernet
 
 # ====================================================================
-import pygame
-import sys
+# import pygame
+# import sys
 
-class PygameListBox:
-    def __init__(self, width, height, options):
-        pygame.init()
+# class PygameListBox:
+#     def __init__(self, width, height, options):
+#         pygame.init()
 
-        self.width = width
-        self.height = height
-        self.options = options
+#         self.width = width
+#         self.height = height
+#         self.options = options
 
-        self.screen = pygame.display.set_mode((width, height))
-        pygame.display.set_caption('Pygame List Box')
+#         self.screen = pygame.display.set_mode((width, height))
+#         pygame.display.set_caption('Pygame List Box')
 
-        self.font = pygame.font.Font(None, 36)
-        self.selected_index = None
+#         self.font = pygame.font.Font(None, 36)
+#         self.selected_index = None
 
-        self.run()
+#         self.run()
 
-    def run(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:  # Left mouse button
-                        x, y = event.pos
-                        self.handle_click(x, y)
+#     def run(self):
+#         while True:
+#             for event in pygame.event.get():
+#                 if event.type == pygame.QUIT:
+#                     pygame.quit()
+#                     sys.exit()
+#                 elif event.type == pygame.MOUSEBUTTONDOWN:
+#                     if event.button == 1:  # Left mouse button
+#                         x, y = event.pos
+#                         self.handle_click(x, y)
 
-            self.draw()
+#             self.draw()
 
-    def handle_click(self, x, y):
-        item_height = self.height // len(self.options)
+#     def handle_click(self, x, y):
+#         item_height = self.height // len(self.options)
 
-        clicked_index = y // item_height
-        if 0 <= clicked_index < len(self.options):
-            self.selected_index = clicked_index
-            print(f"Selected Option: {self.options[self.selected_index]}")
-            # Perform action based on the selected option
+#         clicked_index = y // item_height
+#         if 0 <= clicked_index < len(self.options):
+#             self.selected_index = clicked_index
+#             print(f"Selected Option: {self.options[self.selected_index]}")
+#             # Perform action based on the selected option
 
-    def draw(self):
-        self.screen.fill((255, 255, 255))
+#     def draw(self):
+#         self.screen.fill((255, 255, 255))
 
-        item_height = self.height // len(self.options)
-        for i, option in enumerate(self.options):
-            rect = pygame.Rect(0, i * item_height, self.width, item_height)
-            color = (200, 200, 200) if i != self.selected_index else (150, 150, 150)
-            pygame.draw.rect(self.screen, color, rect)
-            text_surface = self.font.render(option, True, (0, 0, 0))
-            text_rect = text_surface.get_rect(center=(self.width // 2, i * item_height + item_height // 2))
-            self.screen.blit(text_surface, text_rect)
+#         item_height = self.height // len(self.options)
+#         for i, option in enumerate(self.options):
+#             rect = pygame.Rect(0, i * item_height, self.width, item_height)
+#             color = (200, 200, 200) if i != self.selected_index else (150, 150, 150)
+#             pygame.draw.rect(self.screen, color, rect)
+#             text_surface = self.font.render(option, True, (0, 0, 0))
+#             text_rect = text_surface.get_rect(center=(self.width // 2, i * item_height + item_height // 2))
+#             self.screen.blit(text_surface, text_rect)
 
-        pygame.display.flip()
+#         pygame.display.flip()
 
 # if __name__ == "__main__":
 #     options = ["Flash Cards", "Fill Words", "Create Lessons"]
@@ -286,45 +286,45 @@ class PygameListBox:
 
 # ============================================================================
 
-import pygame
-import sys
+# import pygame
+# import sys
 
-class ComboBox:
-    def __init__(self, options, x, y, width, height, font_size=20):
-        self.options = options
-        self.selected_option = None
-        self.rect = pygame.Rect(x, y, width, height)
-        self.font = pygame.font.Font(None, font_size)
-        self.is_open = False
+# class ComboBox:
+#     def __init__(self, options, x, y, width, height, font_size=20):
+#         self.options = options
+#         self.selected_option = None
+#         self.rect = pygame.Rect(x, y, width, height)
+#         self.font = pygame.font.Font(None, font_size)
+#         self.is_open = False
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, (200, 200, 200), self.rect)
-        pygame.draw.polygon(screen, (0, 0, 0), [(self.rect.x + self.rect.width - 20, self.rect.centery - 5),
-                                                (self.rect.x + self.rect.width - 10, self.rect.centery - 5),
-                                                (self.rect.x + self.rect.width - 15, self.rect.centery + 5)])
+#     def draw(self, screen):
+#         pygame.draw.rect(screen, (200, 200, 200), self.rect)
+#         pygame.draw.polygon(screen, (0, 0, 0), [(self.rect.x + self.rect.width - 20, self.rect.centery - 5),
+#                                                 (self.rect.x + self.rect.width - 10, self.rect.centery - 5),
+#                                                 (self.rect.x + self.rect.width - 15, self.rect.centery + 5)])
 
-        selected_text = self.font.render(self.selected_option if self.selected_option else "Select Option", True, (0, 0, 0))
-        screen.blit(selected_text, (self.rect.x + 10, self.rect.y + self.rect.height // 2 - selected_text.get_height() // 2))
+#         selected_text = self.font.render(self.selected_option if self.selected_option else "Select Option", True, (0, 0, 0))
+#         screen.blit(selected_text, (self.rect.x + 10, self.rect.y + self.rect.height // 2 - selected_text.get_height() // 2))
 
-        if self.is_open:
-            for i, option in enumerate(self.options):
-                option_rect = pygame.Rect(self.rect.x, self.rect.y + self.rect.height * (i + 1), self.rect.width, self.rect.height)
-                pygame.draw.rect(screen, (200, 200, 200), option_rect)
-                text = self.font.render(option, True, (0, 0, 0))
-                screen.blit(text, (option_rect.x + 10, option_rect.y + option_rect.height // 2 - text.get_height() // 2))
+#         if self.is_open:
+#             for i, option in enumerate(self.options):
+#                 option_rect = pygame.Rect(self.rect.x, self.rect.y + self.rect.height * (i + 1), self.rect.width, self.rect.height)
+#                 pygame.draw.rect(screen, (200, 200, 200), option_rect)
+#                 text = self.font.render(option, True, (0, 0, 0))
+#                 screen.blit(text, (option_rect.x + 10, option_rect.y + option_rect.height // 2 - text.get_height() // 2))
 
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                if self.rect.collidepoint(event.pos):
-                    self.is_open = not self.is_open
-                elif self.is_open:
-                    for i, option in enumerate(self.options):
-                        option_rect = pygame.Rect(self.rect.x, self.rect.y + self.rect.height * (i + 1),
-                                                 self.rect.width, self.rect.height)
-                        if option_rect.collidepoint(event.pos):
-                            self.selected_option = option
-                            self.is_open = False
+#     def handle_event(self, event):
+#         if event.type == pygame.MOUSEBUTTONDOWN:
+#             if event.button == 1:
+#                 if self.rect.collidepoint(event.pos):
+#                     self.is_open = not self.is_open
+#                 elif self.is_open:
+#                     for i, option in enumerate(self.options):
+#                         option_rect = pygame.Rect(self.rect.x, self.rect.y + self.rect.height * (i + 1),
+#                                                  self.rect.width, self.rect.height)
+#                         if option_rect.collidepoint(event.pos):
+#                             self.selected_option = option
+#                             self.is_open = False
 
 # # Pygame initialization
 # pygame.init()
@@ -380,26 +380,26 @@ class ComboBox:
 # workbook_instance = open_or_create_excel_file(folder_path, input_file_name)
 
 
-import tkinter as tk
-from tkinter import filedialog
-import openpyxl
+# import tkinter as tk
+# from tkinter import filedialog
+# import openpyxl
 
-def open_file():
-    file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
-    if file_path:
-        read_excel(file_path)
+# def open_file():
+#     file_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+#     if file_path:
+#         read_excel(file_path)
 
-def read_excel(file_path):
-    try:
-        workbook = openpyxl.load_workbook(file_path)
-        sheet = workbook.active
+# def read_excel(file_path):
+#     try:
+#         workbook = openpyxl.load_workbook(file_path)
+#         sheet = workbook.active
 
-        for row in sheet.iter_rows(min_row=1, values_only=True):
-            print(row)
+#         for row in sheet.iter_rows(min_row=1, values_only=True):
+#             print(row)
 
-        workbook.close()
-    except Exception as e:
-        print(f"Error: {str(e)}")
+#         workbook.close()
+#     except Exception as e:
+#         print(f"Error: {str(e)}")
 
 # # Create the main window
 # root = tk.Tk()
@@ -412,33 +412,33 @@ def read_excel(file_path):
 # # Start the Tkinter event loop
 # root.mainloop()
 
-import pygame
-from tkinter import Tk, filedialog
+# import pygame
+# from tkinter import Tk, filedialog
 
-class Game:
-    def __init__(self):
-        pygame.init()
-        self.screen = pygame.display.set_mode((400, 200))
-        pygame.display.set_caption("Pygame with File Dialog")
+# class Game:
+#     def __init__(self):
+#         pygame.init()
+#         self.screen = pygame.display.set_mode((400, 200))
+#         pygame.display.set_caption("Pygame with File Dialog")
 
-    def open_file_dialog(self):
-        root = Tk()
-        root.withdraw()  # Hide the main window
+#     def open_file_dialog(self):
+#         root = Tk()
+#         root.withdraw()  # Hide the main window
 
-        file_path = filedialog.askopenfilename(title="Select a File")
-        if file_path:
-            print("Selected File:", file_path)
+#         file_path = filedialog.askopenfilename(title="Select a File")
+#         if file_path:
+#             print("Selected File:", file_path)
 
-    def run(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    self.open_file_dialog()
+#     def run(self):
+#         while True:
+#             for event in pygame.event.get():
+#                 if event.type == pygame.QUIT:
+#                     pygame.quit()
+#                     quit()
+#                 elif event.type == pygame.MOUSEBUTTONDOWN:
+#                     self.open_file_dialog()
 
-            pygame.display.flip()
+#             pygame.display.flip()
 
 # if __name__ == "__main__":
 #     game = Game()
@@ -502,62 +502,58 @@ class Game:
 
 
 
-import sqlite3
-from datetime import datetime
+# import sqlite3
+# from datetime import datetime
 
-def create_table(conn):
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS program_records (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            start_time TEXT,
-            exit_time TEXT,
-            learn_lesson TEXT
-        )
-    ''')
-    conn.commit()
+# def create_table(conn):
+#     cursor = conn.cursor()
+#     cursor.execute('''
+#         CREATE TABLE IF NOT EXISTS program_records (
+#             id INTEGER PRIMARY KEY AUTOINCREMENT,
+#             start_time TEXT,
+#             exit_time TEXT,
+#             learn_lesson TEXT
+#         )
+#     ''')
+#     conn.commit()
 
-def save_program_execution(conn):
-    start_time1 = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+# def save_program_execution(conn):
+#     start_time1 = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Simulate program execution
-    input("Press Enter when the program is about to exit...")
+#     # Simulate program execution
+#     input("Press Enter when the program is about to exit...")
 
-    learn_lesson1 = input("Input lesson to learn...")
+#     learn_lesson1 = input("Input lesson to learn...")
 
-    exit_time1 = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#     exit_time1 = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    cursor = conn.cursor()
-    cursor.execute('''
-        INSERT INTO program_records (start_time, exit_time, learn_lesson) VALUES (?, ?, ?)
-    ''', (start_time1, exit_time1, learn_lesson1))
-    conn.commit()
+#     cursor = conn.cursor()
+#     cursor.execute('''
+#         INSERT INTO program_records (start_time, exit_time, learn_lesson) VALUES (?, ?, ?)
+#     ''', (start_time1, exit_time1, learn_lesson1))
+#     conn.commit()
 
-def read_program_records(conn):
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM program_records')
-    records = cursor.fetchall()
+# def read_program_records(conn):
+#     cursor = conn.cursor()
+#     cursor.execute('SELECT * FROM program_records')
+#     records = cursor.fetchall()
 
-    for record in records:
-        print(f"Start Time: {record[1]}, Exit Time: {record[2]}, learn_lesson: {record[3]}")
+#     for record in records:
+#         print(f"Start Time: {record[1]}, Exit Time: {record[2]}, learn_lesson: {record[3]}")
 
-if __name__ == "__main__":
-    # Connect to SQLite database (change the database name if using a different database)
-    connection = sqlite3.connect('program_records.db')
+# if __name__ == "__main__":
+#     # Connect to SQLite database (change the database name if using a different database)
+#     connection = sqlite3.connect('program_records.db')
 
-    # Create the table if it doesn't exist
-    create_table(connection)
+#     # Create the table if it doesn't exist
+#     create_table(connection)
 
-    # Save program execution record
-    save_program_execution(connection)
+#     # Save program execution record
+#     save_program_execution(connection)
 
-    # Read and display all program records
-    read_program_records(connection)
+#     # Read and display all program records
+#     read_program_records(connection)
 
-    # Close the database connection
-    connection.close()
-
-
-
-
+#     # Close the database connection
+#     connection.close()
 
