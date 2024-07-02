@@ -557,3 +557,24 @@
 #     # Close the database connection
 #     connection.close()
 
+import subprocess
+import os
+
+def close_all_windows_and_shutdown():
+    # Close all open applications
+    try:
+        subprocess.call('taskkill /F /FI "STATUS eq RUNNING"', shell=True)
+        print("All running applications have been closed.")
+    except Exception as e:
+        print(f"Error closing applications: {e}")
+
+    # Shutdown the computer
+    # print("Shutdown initiated.")
+    try:
+        os.system("shutdown /s /t 1")
+        print("Shutdown initiated.")
+    except Exception as e:
+        print(f"Error shutting down: {e}")
+
+# Run the function
+close_all_windows_and_shutdown()
